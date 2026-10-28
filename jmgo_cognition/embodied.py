@@ -18,6 +18,7 @@ from typing import Any
 from . import diffusion as DIFF
 from . import render as RENDER
 from . import task_axiom as TASK
+from .console import utf8_stdio
 
 
 def run_task(task: str, ctx: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -102,6 +103,7 @@ def _demo():
 
 
 if __name__ == "__main__":
+    utf8_stdio()
     if "--demo" in sys.argv:
         _demo()
     else:

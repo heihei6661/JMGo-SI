@@ -14,6 +14,7 @@ import sys
 from typing import Any
 
 from .api import load_core
+from .console import utf8_stdio
 from .loop import run_loop
 
 
@@ -42,6 +43,7 @@ def _print_human(result: dict[str, Any]) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
+    utf8_stdio()
     parser = argparse.ArgumentParser(
         prog="jmgo-cognition",
         description="Offline cognitive loop demo (open framework).",
