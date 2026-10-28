@@ -6,7 +6,8 @@ step is timed, and nothing is executed unless the verifier allows it.
 from __future__ import annotations
 
 import time
-from typing import Any, Iterable
+from collections.abc import Iterable
+from typing import Any
 
 from .api import Core, NullCore, load_core
 

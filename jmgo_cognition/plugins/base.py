@@ -29,7 +29,7 @@ class ActuatorAdapter(Protocol):
 class Plugin(Protocol):
     name: str
 
-    def register(self, registry: "Registry") -> None:
+    def register(self, registry: Registry) -> None:
         """Attach sensors/actuators to the registry."""
 
 
@@ -40,14 +40,14 @@ class Registry:
         self.sensors: dict[str, SensorAdapter] = {}
         self.actuators: dict[str, ActuatorAdapter] = {}
 
-    def add_sensor(self, sensor: SensorAdapter) -> "Registry":
+    def add_sensor(self, sensor: SensorAdapter) -> Registry:
         self.sensors[getattr(sensor, "name", type(sensor).__name__)] = sensor
         return self
 
-    def add_actuator(self, actuator: ActuatorAdapter) -> "Registry":
+    def add_actuator(self, actuator: ActuatorAdapter) -> Registry:
         self.actuators[getattr(actuator, "name", type(actuator).__name__)] = actuator
         return self
 
-    def add_plugin(self, plugin: Plugin) -> "Registry":
+    def add_plugin(self, plugin: Plugin) -> Registry:
         plugin.register(self)
         return self

@@ -3,11 +3,11 @@ from .base import ActuatorAdapter, Plugin, Registry, SensorAdapter
 from .example import DemoPlugin, EchoSensor, LogActuator
 
 __all__ = [
-    "SensorAdapter",
     "ActuatorAdapter",
-    "Plugin",
-    "Registry",
+    "DemoPlugin",
     "EchoSensor",
     "LogActuator",
-    "DemoPlugin",
+    "Plugin",
+    "Registry",
+    "SensorAdapter",
 ]

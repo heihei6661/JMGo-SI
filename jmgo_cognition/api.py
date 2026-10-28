@@ -123,7 +123,7 @@ def load_core(strict: bool = False) -> Core:
         if not isinstance(core, Core):
             raise CoreUnavailable("jmgo_core.Core does not implement the contract")
         return core
-    except Exception as exc:  # noqa: BLE001 - fallback is intentional
+    except Exception as exc:
         if strict:
             raise CoreUnavailable(str(exc)) from exc
         return NullCore()

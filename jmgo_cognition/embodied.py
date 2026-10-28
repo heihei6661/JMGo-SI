@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """embodied.py —— 三层串起来：任务拆解公理 → 通用扩散公理 → 文本渲染。
 
     task text
@@ -16,8 +15,8 @@ import json
 import sys
 from typing import Any
 
-from . import render as RENDER
 from . import diffusion as DIFF
+from . import render as RENDER
 from . import task_axiom as TASK
 
 

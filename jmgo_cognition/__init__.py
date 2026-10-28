@@ -20,8 +20,8 @@ __all__ = [
     "Core",
     "CoreUnavailable",
     "NullCore",
+    "__version__",
     "load_core",
     "run_loop",
     "run_task",
-    "__version__",
 ]

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """diffusion_policy.py —— 动作生成层：扩散式轨迹采样 + 可插拔学习策略。
 
 定位：
@@ -21,7 +20,8 @@ from __future__ import annotations
 
 import json
 import math
-from typing import Any, Callable, Protocol
+from collections.abc import Callable
+from typing import Any, Protocol
 
 import numpy as np
 
@@ -313,7 +313,7 @@ class NullPolicy:
         T = max(2, int(horizon))
         ms = float(cons["max_step"])
         dist = float(np.linalg.norm(goal - start))
-        need = int(math.ceil(dist / ms)) if dist > 0 else 0
+        need = math.ceil(dist / ms) if dist > 0 else 0
         pts = []
         if need + 1 <= T:
             for i in range(need + 1):
@@ -454,7 +454,7 @@ def _selftest():
     ok.append(a["ok"] and not a["reasons"])
     steps = np.linalg.norm(np.diff(traj, axis=0), axis=1)
     ok.append(float(steps.max()) <= DEFAULTS["max_step"] + 1e-6)
-    print("③ 安全闸（碰撞/步长/边界/终点）→", a["ok"], "max_step=%.3f" % steps.max())
+    print("③ 安全闸（碰撞/步长/边界/终点）→", a["ok"], f"max_step={steps.max():.3f}")
 
     bad = traj.copy()
     bad[5] = [3.0, 2.0]  # 撞障碍

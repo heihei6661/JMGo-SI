@@ -56,7 +56,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         ctx = json.loads(args.ctx)
         if not isinstance(ctx, dict):
-            raise ValueError("--ctx must be a JSON object")
+            raise TypeError("--ctx must be a JSON object")
     except Exception as exc:  # noqa: BLE001
         print(f"invalid --ctx: {exc}", file=sys.stderr)
         return 2
