@@ -41,6 +41,11 @@ reimplementing the engine.
 Yes. Implement `SensorAdapter`/`ActuatorAdapter` and register them. See
 `examples/minimal_agent.py`.
 
+**Does the core binary include the action layer?**
+v0.1.1 does: the `task` op runs decomposition → diffusion → safety gate →
+rendering. The same logic is also open in the framework, so it works with or
+without the binary.
+
 **Does it control my robot directly?**
 No. It returns decisions and proposed actions. Your execution layer keeps the
 final veto, limits and emergency stop.

@@ -10,5 +10,6 @@ New-Item -ItemType Directory -Force -Path $Dir, $Bin | Out-Null
 $File = "jmgo_core-$Version-$Asset.zip"
 Invoke-WebRequest "$Base/$File" -OutFile (Join-Path $env:TEMP $File)
 Expand-Archive -Force (Join-Path $env:TEMP $File) -DestinationPath $Dir
-Copy-Item (Join-Path $Dir "jmgo_core.exe") (Join-Path $Bin "jmgo_core.exe") -Force
+$Inner = Join-Path $Dir "jmgo_core-$Version-$Asset"
+Copy-Item (Join-Path $Inner "jmgo_core.exe") (Join-Path $Bin "jmgo_core.exe") -Force
 Write-Host "installed: $Bin\jmgo_core.exe"
