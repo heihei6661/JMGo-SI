@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jmgo-cognition"
+version = "0.1.0"
+description = "Offline-first cognitive skeleton for embodied agents and robots (open framework)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "成都维舜骅呈科技有限公司", email = "2690325118@qq.com" }]
+keywords = [
+  "robotics", "embodied-ai", "cognitive-architecture",
+  "offline", "explainable", "symbolic-reasoning",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: GNU Affero General Public License v3",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Software Development :: Libraries",
+]
+dependencies = ["numpy>=1.24"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "ruff>=0.4"]
+
+[project.scripts]
+jmgo-cognition = "jmgo_cognition.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/heihei6661/JMGo-SI"
+Documentation = "https://github.com/heihei6661/JMGo-SI/tree/main/docs"
+Issues = "https://github.com/heihei6661/JMGo-SI/issues"
+
+[tool.setuptools.packages.find]
+include = ["jmgo_cognition*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

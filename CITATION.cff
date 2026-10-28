@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this framework in research, please cite it."
+title: "JMGo MetaCognition: an offline-first cognitive skeleton for embodied agents"
+type: software
+license: AGPL-3.0-or-later
+version: 0.1.0
+date-released: "2026-10-28"
+authors:
+  - name: "成都维舜骅呈科技有限公司"
+    email: "2690325118@qq.com"

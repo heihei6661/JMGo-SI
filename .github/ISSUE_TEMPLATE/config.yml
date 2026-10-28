@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security report
+    url: https://github.com/heihei6661/JMGo-SI/security/policy
+    about: Please report vulnerabilities privately, not as public issues.
+  - name: Documentation
+    url: https://github.com/heihei6661/JMGo-SI/tree/main/docs
+    about: Architecture, API contract, robot integration, schemas.

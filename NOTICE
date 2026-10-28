@@ -1,0 +1,26 @@
+JMGo MetaCognition / JMGo-SI
+Copyright (c) 2026 成都维舜骅呈科技有限公司
+Contact: 2690325118@qq.com
+
+This repository contains the open framework of JMGo MetaCognition.
+
+The framework source is licensed under the GNU Affero General Public License,
+Version 3 or later (AGPL-3.0-or-later). See LICENSE.
+
+Commercial use that cannot comply with the AGPL requires a separate written
+commercial license. See COMMERCIAL.md.
+
+The following components are NOT covered by the AGPL:
+
+  * jmgo_core (the proprietary reasoning core, distributed separately as a
+    platform-specific binary wheel)
+  * any file under a directory named `core/`
+  * proprietary model weights, lexicons, ledgers, evaluation sets and
+    crawl profiles distributed separately
+
+Third-party data and libraries remain under their own licenses, including
+but not limited to UD treebanks, GeoNames, zhconv, certifi and Playwright.
+You are responsible for complying with those licenses when redistributing.
+
+"JMGo", "JMGo-SI" and the project logo are trademarks of the copyright holder.
+See TRADEMARKS.md.
