@@ -39,10 +39,15 @@ advantage.
 
 ## Delivery
 
-- `jmgo_core` as platform wheels (`cp310`–`cp312`, macOS arm64/x86_64, Linux,
-  Windows), built in CI and signed.
+- `jmgo_core` as a **standalone binary** (macOS arm64/x86_64, Linux x86_64,
+  Windows x86_64), published as public GitHub Release assets with `SHA256SUMS`.
+  A private wheel can be provided for licensed customers.
+- v0.1 binary covers `plan` / `reason` / `verify`; retrieval stays open in
+  `jmgo_cognition/retrieval.py` so the binary does not ship 150 MB of geodata
+  or a browser stack.
 - Public type stubs in `core-stubs/` so the framework and IDEs see the contract.
-- License: proprietary EULA; not covered by AGPL-3.0-or-later.
+- License: proprietary EULA; not covered by AGPL-3.0-or-later. Public download
+  does not imply a commercial license.
 
 ## Third-party data
 

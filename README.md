@@ -122,10 +122,27 @@ python -m jmgo_cognition.cli "把桌上的杯子拿过来"
 [core] jmgo_core not installed — running NullCore (framework demo only)
 ```
 
-安装闭源核心（从私有源或本地 wheel）：
+安装核心（二选一）：
+
+**A. 公开二进制（推荐，别人可直接用）**
+
+```bash
+bash scripts/install_core.sh          # macOS / Linux
+# Windows:
+pwsh scripts/install_core.ps1
+```
+
+装到 `~/.jmgo/bin/jmgo_core`，框架会自动发现；也可用 `JMGO_CORE_BIN=/path/to/jmgo_core` 指定。
+
+**B. 私有 wheel（授权客户）**
 
 ```bash
 pip install jmgo_core-0.1.0-cp312-cp312-macosx_11_0_arm64.whl
+```
+
+然后：
+
+```bash
 python -m jmgo_cognition.cli "把桌上的杯子拿过来"
 ```
 

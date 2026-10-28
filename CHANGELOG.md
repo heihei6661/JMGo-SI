@@ -13,3 +13,6 @@
   isolated from answer/verdict/actions (with failure containment tests).
 - Documented self-evolution: versioned rules/experience/lexicon, no source
   rewriting, offline and reversible.
+- Core binary v0.1: JSON Lines `plan`/`reason`/`verify`, Nuitka-compiled,
+  public GitHub Release assets + `SHA256SUMS`, installer scripts, `BinaryCore`
+  adapter with `NullCore` fallback, and open retrieval in the framework.

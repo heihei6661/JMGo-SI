@@ -11,4 +11,5 @@ Start here:
 7. [Vocabulary schema](vocabulary-schema.md) — adding domain terms.
 8. [Answer schema](answer-schema.md) — status, basis, actions, caveats.
 9. [FAQ](faq.md) — licensing, offline behavior, recovery.
-10. [Commercial license](../COMMERCIAL.md) — closed-source/SaaS use.
+10. [Core binary](core-binary.md) — install, protocol, platforms.
+11. [Commercial license](../COMMERCIAL.md) — closed-source/SaaS use.

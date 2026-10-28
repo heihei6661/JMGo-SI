@@ -6,7 +6,12 @@ calls into it more than these five methods.
 """
 from __future__ import annotations
 
+import contextlib
 import importlib
+import json
+import os
+import subprocess
+import threading
 from typing import Any, Protocol, runtime_checkable
 
 
@@ -68,6 +73,113 @@ class ReflectiveCore(Protocol):
         """Return ``{"emotion": {...}, "quality": str, "notes": [...]}``."""
 
 
+class BinaryCore:
+    """Five-call adapter for the proprietary core binary (JSON Lines).
+
+    Discovered via ``JMGO_CORE_BIN`` or ``~/.jmgo/bin/jmgo_core``. Retrieval
+    stays in the open framework; the binary does plan/reason/verify.
+    """
+
+    installed = True
+
+    def __init__(self, path: str):
+        self.path = path
+        self._lock = threading.Lock()
+        self._proc: subprocess.Popen | None = None
+        self._start()
+
+    def _start(self) -> None:
+        self._proc = subprocess.Popen(
+            [self.path],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            text=True,
+            encoding="utf-8",
+            bufsize=1,
+        )
+
+    def _stop(self) -> None:
+        proc, self._proc = self._proc, None
+        if proc is None:
+            return
+        with contextlib.suppress(OSError):
+            proc.kill()
+        with contextlib.suppress(OSError, subprocess.TimeoutExpired):
+            proc.wait(timeout=2)
+        for stream in (proc.stdin, proc.stdout):
+            if stream is not None:
+                with contextlib.suppress(OSError):
+                    stream.close()
+
+    def _call(self, payload: dict[str, Any]) -> dict[str, Any]:
+        with self._lock:
+            for attempt in (0, 1):
+                try:
+                    if self._proc is None or self._proc.poll() is not None:
+                        self._start()
+                    assert self._proc is not None
+                    assert self._proc.stdin is not None and self._proc.stdout is not None
+                    self._proc.stdin.write(json.dumps(payload, ensure_ascii=False) + "\n")
+                    self._proc.stdin.flush()
+                    line = self._proc.stdout.readline()
+                    if not line:
+                        raise RuntimeError("core closed the stream")
+                    return json.loads(line)
+                except Exception:
+                    self._stop()
+                    if attempt:
+                        raise
+        raise CoreUnavailable("core call failed")
+
+    def version(self) -> dict[str, Any]:
+        return self._call({"op": "version"})
+
+    def plan(self, query: str, ctx: dict[str, Any]) -> dict[str, Any]:
+        return self._call({"op": "plan", "query": query,
+                           "subject": (ctx or {}).get("subject")})
+
+    def retrieve(self, plan: dict[str, Any], ctx: dict[str, Any]) -> dict[str, Any]:
+        from .retrieval import search
+        queries = [q for q in ((plan or {}).get("queries") or []) if q][:3]
+        items: list[dict[str, Any]] = []
+        errors: list[str] = []
+        seen: set[str] = set()
+        if queries:
+            from concurrent.futures import ThreadPoolExecutor
+            with ThreadPoolExecutor(max_workers=len(queries)) as ex:
+                results = list(ex.map(lambda q: search(q, limit=4), queries))
+        else:
+            results = []
+        for res in results:
+            errors.extend(res.get("errors") or [])
+            for it in res.get("items") or []:
+                key = (it.get("title") or "").strip()
+                if key and key not in seen:
+                    seen.add(key)
+                    items.append(it)
+        return {"items": items[:8], "errors": errors[:3]}
+
+    def reason(self, query: str, evidence: dict[str, Any],
+               ctx: dict[str, Any]) -> dict[str, Any]:
+        return self._call({"op": "reason", "query": query,
+                           "subject": (ctx or {}).get("subject"),
+                           "goal": (ctx or {}).get("goal"),
+                           "evidence": evidence or {}})
+
+    def verify(self, answer: dict[str, Any], ctx: dict[str, Any]) -> dict[str, Any]:
+        return self._call({"op": "verify", "answer": answer or {}})
+
+    def reflect(self, result: dict[str, Any], ctx: dict[str, Any]) -> dict[str, Any]:
+        return {"available": False, "emotion": None, "notes": ["binary_core"]}
+
+    def close(self) -> None:
+        self._stop()
+
+    def __del__(self) -> None:  # pragma: no cover - best effort
+        self._stop()
+
+
 class NullCore:
     """Framework demo core. It never invents an answer and never acts."""
 
@@ -107,6 +219,21 @@ class NullCore:
                 "notes": ["core_missing"]}
 
 
+def _binary_path() -> str | None:
+    env = os.environ.get("JMGO_CORE_BIN")
+    exe = "jmgo_core.exe" if os.name == "nt" else "jmgo_core"
+    cands = []
+    if env:
+        cands.append(env)
+    cands.append(os.path.expanduser(os.path.join("~", ".jmgo", "bin", exe)))
+    cands.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                              "core", exe))
+    for p in cands:
+        if p and os.path.isfile(p):
+            return p
+    return None
+
+
 def load_core(strict: bool = False) -> Core:
     """Import the proprietary core if present.
 
@@ -126,4 +253,14 @@ def load_core(strict: bool = False) -> Core:
     except Exception as exc:
         if strict:
             raise CoreUnavailable(str(exc)) from exc
-        return NullCore()
+
+    path = _binary_path()
+    if path:
+        try:
+            core = BinaryCore(path)
+            core.version()          # handshake: reject a broken binary
+            return core
+        except Exception as exc:
+            if strict:
+                raise CoreUnavailable(f"binary core failed: {exc}") from exc
+    return NullCore()

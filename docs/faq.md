@@ -55,8 +55,10 @@ macOS arm64/x86_64, Linux x86_64, Windows x86_64; Python 3.10–3.12. The core i
 built per platform/Python version.
 
 **Can I run it without the core?**
-Yes, with `NullCore`: the loop runs, answers report `core_missing`, and the
-verifier blocks actions. This is useful for integration and CI.
+For integration/CI, yes: `NullCore` keeps the loop observable, reports
+`core_missing`, and blocks actions. For real answers, install the public core
+binary (`scripts/install_core.sh`); the framework discovers
+`~/.jmgo/bin/jmgo_core` automatically.
 
 **How do I report a security issue?**
 Privately, per `SECURITY.md`. Do not open a public issue.
