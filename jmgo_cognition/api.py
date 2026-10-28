@@ -170,6 +170,10 @@ class BinaryCore:
     def verify(self, answer: dict[str, Any], ctx: dict[str, Any]) -> dict[str, Any]:
         return self._call({"op": "verify", "answer": answer or {}})
 
+    def task(self, task: str, ctx: dict[str, Any]) -> dict[str, Any]:
+        """Optional: decomposition + diffusion + rendering inside the binary."""
+        return self._call({"op": "task", "task": task, "ctx": ctx or {}})
+
     def reflect(self, result: dict[str, Any], ctx: dict[str, Any]) -> dict[str, Any]:
         return {"available": False, "emotion": None, "notes": ["binary_core"]}
 
@@ -222,9 +226,10 @@ class NullCore:
 def _binary_path() -> str | None:
     env = os.environ.get("JMGO_CORE_BIN")
     exe = "jmgo_core.exe" if os.name == "nt" else "jmgo_core"
-    cands = []
     if env:
-        cands.append(env)
+        # Explicit override wins: never silently use a different binary.
+        return env if os.path.isfile(env) else None
+    cands = []
     cands.append(os.path.expanduser(os.path.join("~", ".jmgo", "bin", exe)))
     cands.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                               "core", exe))

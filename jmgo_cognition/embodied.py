@@ -11,6 +11,7 @@
 """
 from __future__ import annotations
 
+import contextlib
 import json
 import sys
 from typing import Any
@@ -21,8 +22,15 @@ from . import task_axiom as TASK
 from .console import utf8_stdio
 
 
-def run_task(task: str, ctx: dict[str, Any] | None = None) -> dict[str, Any]:
+def run_task(task: str, ctx: dict[str, Any] | None = None,
+             core: Any | None = None) -> dict[str, Any]:
     ctx = dict(ctx or {})
+    # If the binary advertises the task op, let it run the whole action layer.
+    if core is not None and hasattr(core, "task"):
+        with contextlib.suppress(Exception):
+            out = core.task(task, ctx)
+            if isinstance(out, dict) and out.get("text") is not None:
+                return out
     plan = TASK.decompose(task, ctx)
 
     motion = verdict = None

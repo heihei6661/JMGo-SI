@@ -137,7 +137,7 @@ pwsh scripts/install_core.ps1
 **B. 私有 wheel（授权客户）**
 
 ```bash
-pip install jmgo_core-0.1.0-cp312-cp312-macosx_11_0_arm64.whl
+pip install jmgo_core-0.1.1-cp312-cp312-macosx_11_0_arm64.whl
 ```
 
 然后：

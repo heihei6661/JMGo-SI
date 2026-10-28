@@ -4,7 +4,7 @@ The reasoning core ships as a standalone binary, downloaded from GitHub
 Releases. The framework discovers it automatically and talks to it over JSON
 Lines (one request per line).
 
-## What the v0.1 binary does
+## What the v0.1.1 binary does
 
 | op | behavior |
 |---|---|
@@ -12,6 +12,7 @@ Lines (one request per line).
 | `plan` | query planning (1–2 term queries, slots) |
 | `reason` | evidence → answer (units/years/subject gates) |
 | `verify` | gate the answer (`ok` / `gap`) |
+| `task` | task decomposition → diffusion motion → safety gate → rendered text |
 | `retrieve` | returns empty in v0.1; retrieval is open, in `retrieval.py` |
 
 Keeping retrieval in the open framework keeps the binary small (no 150 MB
@@ -47,15 +48,21 @@ version handshake, so installation problems never crash the loop.
 {"answer":"2024 年中国GDP约 134.91万亿元。","status":"ok","basis":[],"actions":[]}
 ```
 
+```json
+{"op":"task","task":"把桌上的水拿过来",
+ "ctx":{"start":[0,0],"goal":[6,4],"obstacles":[],"horizon":22}}
+{"plan":{...},"motion":{...},"verdict":{"ok":true},"text":"把「把桌上的水…」拆成 4 步…"}
+```
+
 Unknown ops return `{"error": ...}`; the framework treats that as a failed step.
 
 ## Platforms and assets
 
 ```
-jmgo_core-0.1.0-macos-arm64.tar.gz
-jmgo_core-0.1.0-macos-x86_64.tar.gz
-jmgo_core-0.1.0-linux-x86_64.tar.gz
-jmgo_core-0.1.0-windows-x86_64.zip
+jmgo_core-0.1.1-macos-arm64.tar.gz
+jmgo_core-0.1.1-macos-x86_64.tar.gz
+jmgo_core-0.1.1-linux-x86_64.tar.gz
+jmgo_core-0.1.1-windows-x86_64.zip
 SHA256SUMS
 ```
 

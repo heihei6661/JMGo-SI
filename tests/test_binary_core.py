@@ -22,6 +22,9 @@ for line in sys.stdin:
         out = {"answer": "fake answer", "status": "ok", "basis": [], "actions": []}
     elif op == "verify":
         out = {"ok": True, "reasons": [], "risk": "low"}
+    elif op == "task":
+        out = {"task": "t", "plan": {"applicable": True}, "motion": None,
+               "verdict": {"ok": True}, "text": "from binary"}
     else:
         out = {"error": "unknown"}
     print(json.dumps(out, ensure_ascii=False), flush=True)
@@ -50,6 +53,7 @@ class BinaryCoreTest(unittest.TestCase):
             answer = core.reason("test", {"items": []}, {})
             self.assertEqual(answer["status"], "ok")
             self.assertTrue(core.verify(answer, {})["ok"])
+            self.assertEqual(core.task("把水拿过来", {})["text"], "from binary")
         finally:
             core.close()
 

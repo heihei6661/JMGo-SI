@@ -2,7 +2,7 @@
 # Install the proprietary core binary from GitHub Releases.
 set -euo pipefail
 
-VERSION="${JMGO_CORE_VERSION:-0.1.0}"
+VERSION="${JMGO_CORE_VERSION:-0.1.1}"
 OS="$(uname -s)"
 ARCH="$(uname -m)"
 case "$OS/$ARCH" in

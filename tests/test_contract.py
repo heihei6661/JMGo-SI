@@ -126,9 +126,18 @@ class ContractTest(unittest.TestCase):
         self.assertEqual(EchoSensor().read()["text"], "hello")
 
     def test_loader_falls_back(self):
-        core = load_core()
-        self.assertIsInstance(core, Core)
-        self.assertFalse(getattr(core, "installed", False))
+        import os
+        old = os.environ.get("JMGO_CORE_BIN")
+        os.environ["JMGO_CORE_BIN"] = os.path.join(os.path.dirname(__file__), "missing-core")
+        try:
+            core = load_core()
+            self.assertIsInstance(core, Core)
+            self.assertFalse(getattr(core, "installed", False))
+        finally:
+            if old is None:
+                os.environ.pop("JMGO_CORE_BIN", None)
+            else:
+                os.environ["JMGO_CORE_BIN"] = old
 
 
 if __name__ == "__main__":

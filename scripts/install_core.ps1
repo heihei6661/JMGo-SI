@@ -1,6 +1,6 @@
 # Install the proprietary core binary on Windows (PowerShell 7+).
 $ErrorActionPreference = "Stop"
-$Version = if ($env:JMGO_CORE_VERSION) { $env:JMGO_CORE_VERSION } else { "0.1.0" }
+$Version = if ($env:JMGO_CORE_VERSION) { $env:JMGO_CORE_VERSION } else { "0.1.1" }
 $Asset = "windows-x86_64"
 $Base = "https://github.com/heihei6661/JMGo-SI/releases/download/v$Version"
 $Dir = Join-Path $HOME ".jmgo\core\$Version"
